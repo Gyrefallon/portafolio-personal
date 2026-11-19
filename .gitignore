@@ -1,0 +1,22 @@
+node_modules/
+.npm-cache/
+.astro/
+dist/
+.browser-tools/
+.browser-work/
+.pi/
+.verification/
+.wrangler-tools/
+.wrangler-home/
+.wrangler/
+.env
+.env.*
+# Local AI runtime state
+.atl/
+
+# Local-only material: CV files, ODD records and the private Worker config
+*.pdf
+odd/
+.impeccable/
+PRODUCT.md
+worker/wrangler.toml
