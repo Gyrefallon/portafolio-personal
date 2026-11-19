@@ -1,0 +1,167 @@
+---
+import type { Language, PortfolioContent } from '../../content/portfolio';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  t: PortfolioContent;
+  language: Language;
+}
+
+const { t, language } = Astro.props;
+const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT || '';
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '';
+const clientMessages = {
+  to: t.contactEmail,
+  sending: t.form.sending,
+  success: t.form.success,
+  failure: t.form.failure,
+  mailtoLabel: t.email,
+  mailtoHelper: t.form.helperMailto,
+  verificationRequired: t.form.verificationRequired,
+  errors: t.form.errors
+};
+---
+
+<section id="contact" class="section scroll-mt-28 border-t border-line md:scroll-mt-20" aria-labelledby="contact-title">
+  <div class="container-page grid grid-cols-1 gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+    <div class="lg:sticky lg:top-24 lg:self-start">
+      <div class="reveal">
+        <SectionHeading
+          index="04"
+          label={t.nav[3]}
+          title={t.contactTitle}
+          intro={t.contactText}
+          titleId="contact-title"
+        />
+      </div>
+
+      <div class="mt-8 grid grid-cols-1 gap-3">
+        <a
+          href={`mailto:${t.contactEmail}`}
+          class="group flex items-center gap-4 rounded-2xl border border-line bg-white p-4 transition duration-300 ease-expo hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-card"
+        >
+          <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-ink text-white">
+            <Icon name="mail" class="size-4" />
+          </span>
+          <span class="min-w-0">
+            <span class="block text-[11px] uppercase tracking-wider text-muted">{t.form.emailLabel}</span>
+            <span class="block truncate text-sm font-semibold text-ink">{t.contactEmail}</span>
+          </span>
+          <Icon name="arrowUpRight" class="ml-auto size-4 shrink-0 text-muted transition group-hover:text-ink" />
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/gonzalopenapaez/"
+          class="group flex items-center gap-4 rounded-2xl border border-line bg-white p-4 transition duration-300 ease-expo hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-card"
+        >
+          <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-ink text-white">
+            <Icon name="linkedin" class="size-4" />
+          </span>
+          <span class="min-w-0">
+            <span class="block text-[11px] uppercase tracking-wider text-muted">LinkedIn</span>
+            <span class="block text-sm font-semibold text-ink">{t.linkedin}</span>
+          </span>
+          <Icon name="arrowUpRight" class="ml-auto size-4 shrink-0 text-muted transition group-hover:text-ink" />
+        </a>
+
+        <a
+          href="https://github.com/Gyrefallon"
+          class="group flex items-center gap-4 rounded-2xl border border-line bg-white p-4 transition duration-300 ease-expo hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-card"
+        >
+          <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-ink text-white">
+            <Icon name="github" class="size-4" />
+          </span>
+          <span class="min-w-0">
+            <span class="block text-[11px] uppercase tracking-wider text-muted">GitHub</span>
+            <span class="block text-sm font-semibold text-ink">{t.github}</span>
+          </span>
+          <Icon name="arrowUpRight" class="ml-auto size-4 shrink-0 text-muted transition group-hover:text-ink" />
+        </a>
+      </div>
+    </div>
+
+    <form
+      class="reveal rounded-4xl border border-line bg-canvas p-6 shadow-card sm:p-8"
+      data-contact-form
+      data-endpoint={endpoint}
+      data-messages={JSON.stringify(clientMessages)}
+      novalidate
+      aria-label={t.form.title}
+    >
+      <p class="font-mono text-eyebrow uppercase text-accent">{t.form.title}</p>
+
+      <div class="mt-6 grid gap-5">
+        <div class="field">
+          <label for="contact-name" class="field-label">{t.form.nameLabel}</label>
+          <input
+            id="contact-name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            required
+            class="field-control"
+            aria-describedby="contact-name-hint contact-name-error"
+          />
+          <span class="field-hint" id="contact-name-hint">{t.form.nameHint}</span>
+          <span class="field-error" id="contact-name-error"></span>
+        </div>
+
+        <div class="field">
+          <label for="contact-email" class="field-label">{t.form.emailLabel}</label>
+          <input
+            id="contact-email"
+            name="email"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            spellcheck="false"
+            required
+            class="field-control"
+            aria-describedby="contact-email-hint contact-email-error"
+          />
+          <span class="field-hint" id="contact-email-hint">{t.form.emailHint}</span>
+          <span class="field-error" id="contact-email-error"></span>
+        </div>
+
+        <div class="field">
+          <label for="contact-message" class="field-label">{t.form.messageLabel}</label>
+          <textarea
+            id="contact-message"
+            name="message"
+            rows="5"
+            required
+            class="field-control min-h-36 resize-y"
+            aria-describedby="contact-message-hint contact-message-error"
+          ></textarea>
+          <span class="field-hint" id="contact-message-hint">{t.form.messageHint}</span>
+          <span class="field-error" id="contact-message-error"></span>
+        </div>
+      </div>
+
+      <div class="absolute -left-[9999px] h-px w-px overflow-hidden whitespace-nowrap" aria-hidden="true">
+        <label for="contact-company">{t.form.companyLabel}</label>
+        <input id="contact-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      {turnstileSiteKey && (
+        <div class="mt-5 flex justify-center rounded-xl border border-line bg-white p-4">
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-language={language} data-theme="light"></div>
+          <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        </div>
+      )}
+
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <button type="submit" class="btn btn-primary w-full sm:w-auto">{t.form.submit}</button>
+        <a
+          href={`mailto:${t.contactEmail}`}
+          class="text-sm font-semibold text-ink underline decoration-ink/20 underline-offset-4 transition hover:decoration-ink"
+        >{t.email}</a>
+      </div>
+
+      <p class="field-hint mt-4" id="contact-form-note">{endpoint ? t.form.helperEndpoint : t.form.helperMailto}</p>
+      <p class="field-hint mt-2">{t.form.privacy}</p>
+      <p id="contact-status" role="status" aria-live="polite" class="mt-4 min-h-6 text-sm font-medium text-ink/80"></p>
+    </form>
+  </div>
+</section>

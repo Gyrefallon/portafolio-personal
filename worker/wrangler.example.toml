@@ -1,0 +1,20 @@
+# Copy this file to wrangler.toml and fill the values before deploying the
+# Worker. The real wrangler.toml is intentionally ignored by Git because it
+# holds the recipient address and the allowed origin.
+# Private credentials are never written into this file.
+
+name = "portfolio-contact"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+
+[vars]
+# Recipient address for inquiries.
+CONTACT_EMAIL = "you@example.com"
+# Resend sandbox sender, or a verified domain sender.
+CONTACT_FROM = "onboarding@resend.dev"
+# Exact origin of the published site, with no trailing slash.
+ALLOWED_ORIGIN = "https://OWNER.github.io"
+
+# Private values — set once with the Wrangler CLI:
+#   RESEND_API_KEY
+#   TURNSTILE_SECRET

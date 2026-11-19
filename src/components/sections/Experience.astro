@@ -1,0 +1,65 @@
+---
+import type { PortfolioContent } from '../../content/portfolio';
+import SectionHeading from '../ui/SectionHeading.astro';
+
+interface Props {
+  t: PortfolioContent;
+}
+
+const { t } = Astro.props;
+const skills = t.skills.split(' · ');
+const roleTags = [
+  ['VB.NET', 'C#', 'Oracle PL/SQL'],
+  ['Azure', 'Data Factory', 'Databricks', '.NET 6', 'Jenkins'],
+  ['Angular 13', 'TypeScript', '.NET Core', 'C#', 'MySQL']
+];
+---
+
+<section id="experience" class="section scroll-mt-28 border-t border-line bg-canvas md:scroll-mt-20" aria-labelledby="experience-title">
+  <div class="container-page">
+    <div class="reveal">
+      <SectionHeading
+        index="02"
+        label={t.nav[1]}
+        title={t.experienceTitle}
+        intro={t.experienceIntro}
+        titleId="experience-title"
+      />
+    </div>
+
+    <div class="mt-12 border-t border-line">
+      {t.roles.map((role, index) => (
+        <article class="group grid gap-3 border-b border-line py-8 md:grid-cols-[11rem_1fr] md:gap-10 md:py-10">
+          <div class="flex items-center gap-2.5 md:items-start">
+            <span class="mt-1.5 hidden size-2 shrink-0 rounded-full bg-accent md:block" aria-hidden="true"></span>
+            <p class="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">{role.date}</p>
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold tracking-tight text-ink">{role.title}</h3>
+            <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{role.text}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {(roleTags[index] ?? []).map((tag) => (
+                <li class="rounded-full border border-line bg-white px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide text-muted">{tag}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="mt-12 grid gap-4 lg:grid-cols-[1.5fr_1fr]">
+      <div class="reveal rounded-3xl border border-line bg-white p-7">
+        <h3 class="font-mono text-eyebrow uppercase text-accent">{t.toolsTitle}</h3>
+        <ul class="mt-5 flex flex-wrap gap-2">
+          {skills.map((skill) => (
+            <li class="rounded-full bg-canvas px-3 py-1.5 text-xs font-medium text-ink/80">{skill}</li>
+          ))}
+        </ul>
+      </div>
+      <div class="reveal rounded-3xl bg-ink p-7 text-white">
+        <h3 class="font-mono text-eyebrow uppercase text-mint">{t.educationTitle}</h3>
+        <p class="mt-4 text-sm leading-relaxed text-white/70">{t.education}</p>
+      </div>
+    </div>
+  </div>
+</section>

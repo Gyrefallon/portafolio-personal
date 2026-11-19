@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+/* Design tokens: the only source of colour, type, radius and motion values.
+   Components compose utilities from these tokens instead of loose hex values. */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Menlo, Consolas, monospace;
+
+  --color-ink: #0b1512;
+  --color-ink-soft: #16241f;
+  --color-muted: #56655f;
+  --color-line: #e3e9e5;
+  --color-canvas: #f5f8f6;
+  --color-accent: #0e7a6a;
+  --color-accent-strong: #0a5f52;
+  --color-accent-soft: #dff1ec;
+  --color-mint: #8fe3cd;
+  --color-alert: #b42318;
+
+  --text-display: clamp(2.55rem, 6.2vw, 5.1rem);
+  --text-display--line-height: 0.99;
+  --text-display--letter-spacing: -0.045em;
+  --text-display--font-weight: 600;
+
+  --text-h2: clamp(1.95rem, 3.6vw, 3.1rem);
+  --text-h2--line-height: 1.06;
+  --text-h2--letter-spacing: -0.035em;
+  --text-h2--font-weight: 600;
+
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.18em;
+  --text-eyebrow--font-weight: 600;
+
+  --radius-4xl: 2rem;
+  --shadow-card: 0 1px 2px rgb(11 21 18 / 0.04), 0 18px 40px -24px rgb(11 21 18 / 0.25);
+  --shadow-float: 0 30px 60px -28px rgb(11 21 18 / 0.45);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-marquee: marquee 44s linear infinite;
+
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes reveal-up {
+    from { opacity: 0; transform: translateY(1.25rem); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  :where(a, button, input, textarea, summary):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .section {
+    @apply py-20 sm:py-24 lg:py-28;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full text-sm font-semibold tracking-tight transition duration-300 ease-expo;
+  }
+
+  .btn-primary {
+    @apply bg-ink px-6 py-3.5 text-white shadow-card hover:-translate-y-0.5 hover:bg-ink-soft hover:shadow-float disabled:translate-y-0 disabled:cursor-progress disabled:opacity-60;
+  }
+
+  .btn-ghost {
+    @apply border border-ink/15 bg-white px-6 py-3.5 text-ink hover:border-ink/30 hover:bg-canvas;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-xs;
+  }
+
+  .field {
+    @apply grid gap-2;
+  }
+
+  .field-label {
+    @apply text-sm font-medium text-ink;
+  }
+
+  .field-control {
+    @apply w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-ink transition placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/25 aria-[invalid=true]:border-alert aria-[invalid=true]:ring-alert/10;
+  }
+
+  .field-hint {
+    @apply text-xs leading-relaxed text-muted;
+  }
+
+  .field-error {
+    @apply text-xs font-medium leading-relaxed text-alert;
+  }
+
+  .field-error:empty {
+    @apply hidden;
+  }
+
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
+}
+
+@utility bg-dot-grid-light {
+  background-image: radial-gradient(circle at 1px 1px, rgb(11 21 18 / 0.16) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+@utility bg-dot-grid-dark {
+  background-image: radial-gradient(circle at 1px 1px, rgb(255 255 255 / 0.14) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+@utility hero-glow {
+  background: radial-gradient(52% 52% at 68% 32%, var(--color-accent-soft) 0%, transparent 72%);
+}
+
+/* Progressive enhancement: sections settle into place as they enter the
+   viewport. Without view-timeline support or with reduced motion the content
+   simply renders in its final state. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 26%;
+    }
+  }
+}

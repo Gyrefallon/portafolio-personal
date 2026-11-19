@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "chosen": "01-propuesta-abierta.html",
+  "handoffs": {
+    "01-propuesta-abierta.html": {
+      "status": "in_progress",
+      "queued": false,
+      "sentAt": "2026-11-11T20:23:21.191Z",
+      "startedAt": "2026-11-11T20:39:26.290Z",
+      "implementedAt": null,
+      "feature": "odd/tasks/portfolio-freelance.md",
+      "note": "Primera implementación disponible; verificación independiente pendiente.",
+      "previewUrl": "http://127.0.0.1:4321/"
+    }
+  }
+}

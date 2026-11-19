@@ -1,0 +1,10 @@
+{
+  "title": "Portafolio freelance · direcciones visuales",
+  "brief": "Tres prototipos en español para presentar servicios de backend e integración sin inventar pruebas comerciales.",
+  "feature": "odd/tasks/portfolio-freelance.md",
+  "artboards": [
+    { "file": "01-propuesta-abierta.html", "title": "Propuesta abierta", "tradeoff": "El enfoque consultivo aclara el encargo; el formato textual depende de una buena redacción.", "width": 1440, "height": 900 },
+    { "file": "02-indice-practico.html", "title": "Índice práctico", "tradeoff": "La navegación y los servicios se reconocen rápidamente; la estructura es más familiar.", "width": 1440, "height": 900 },
+    { "file": "03-pliegues.html", "title": "Pliegues", "tradeoff": "La exploración progresiva reduce la densidad inicial; parte del detalle requiere abrir secciones.", "width": 1440, "height": 900 }
+  ]
+}

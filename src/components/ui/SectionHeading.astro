@@ -1,0 +1,24 @@
+---
+interface Props {
+  index: string;
+  label: string;
+  title: string;
+  intro?: string;
+  invert?: boolean;
+  titleId?: string;
+}
+
+const { index, label, title, intro, invert = false, titleId } = Astro.props;
+---
+
+<div class="max-w-3xl">
+  <p class:list={['font-mono text-eyebrow uppercase', invert ? 'text-mint' : 'text-accent']}>
+    <span class:list={[invert ? 'text-white/40' : 'text-muted/60']}>({index})</span> · {label}
+  </p>
+  <h2 id={titleId} class:list={['mt-4 text-h2', invert ? 'text-white' : 'text-ink']}>{title}</h2>
+  {intro && (
+    <p class:list={['mt-4 max-w-2xl text-base leading-relaxed sm:text-lg', invert ? 'text-white/70' : 'text-muted']}>
+      {intro}
+    </p>
+  )}
+</div>

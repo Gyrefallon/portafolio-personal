@@ -1,0 +1,65 @@
+---
+import { pageUrl } from '../../lib/urls';
+import type { Language, PortfolioContent } from '../../content/portfolio';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  t: PortfolioContent;
+  language: Language;
+}
+
+const { t, language } = Astro.props;
+const links = ['services', 'experience', 'project', 'contact'];
+---
+
+<header class="sticky top-0 z-50 border-b border-line/80 bg-white/95 backdrop-blur-md">
+  <div class="container-page flex flex-wrap items-center gap-x-3 gap-y-0 md:h-16 md:flex-nowrap md:gap-6">
+    <a href={pageUrl(language)} class="mr-auto flex items-center gap-2.5 py-3">
+      <span class="grid size-9 place-items-center rounded-xl bg-ink font-mono text-[11px] font-semibold tracking-tight text-white">GP</span>
+      <span class="text-sm font-semibold tracking-tight">Gonzalo Peña Páez</span>
+    </a>
+
+    <nav
+      aria-label={t.navLabel}
+      class="order-last -mx-5 flex w-[calc(100%+2.5rem)] items-center gap-1 overflow-x-auto border-t border-line/70 px-4 py-2 md:order-none md:mx-0 md:w-auto md:border-0 md:px-0 md:py-0"
+    >
+      {links.map((link, index) => (
+        <a
+          href={`#${link}`}
+          class="shrink-0 rounded-full px-3 py-1.5 text-xs font-medium text-muted transition hover:bg-canvas hover:text-ink md:text-sm"
+        >
+          {t.nav[index]}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <nav aria-label={t.languages} class="flex items-center gap-0.5 rounded-full border border-line bg-canvas p-1">
+        <a
+          href={pageUrl('es')}
+          hreflang="es"
+          lang="es"
+          aria-current={language === 'es' ? 'page' : undefined}
+          class:list={[
+            'rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wider transition',
+            language === 'es' ? 'bg-ink text-white' : 'text-muted hover:text-ink'
+          ]}
+        >ES</a>
+        <a
+          href={pageUrl('en')}
+          hreflang="en"
+          lang="en"
+          aria-current={language === 'en' ? 'page' : undefined}
+          class:list={[
+            'rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wider transition',
+            language === 'en' ? 'bg-ink text-white' : 'text-muted hover:text-ink'
+          ]}
+        >EN</a>
+      </nav>
+      <a href="#contact" class="btn btn-primary btn-sm hidden sm:inline-flex">
+        {t.ctaShort}
+        <Icon name="arrowUpRight" class="size-3.5" />
+      </a>
+    </div>
+  </div>
+</header>

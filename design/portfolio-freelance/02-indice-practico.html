@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gonzalo Peña Páez · Índice práctico</title>
+<style>
+  :root { color-scheme: light; font-family: system-ui, sans-serif; background: #f0f1e8; color: #142c52; }
+  * { box-sizing: border-box; } body { margin: 0; line-height: 1.5; }
+  a { color: inherit; text-underline-offset: .25em; } a:focus-visible { outline: 3px solid #bd420d; outline-offset: 4px; }
+  .skip { position: absolute; top: -5rem; left: 1rem; background: white; padding: .8rem; z-index: 2; } .skip:focus { top: 1rem; }
+  .layout { display: grid; grid-template-columns: minmax(14rem, 23%) 1fr; min-height: 100vh; }
+  header { background: #183d76; color: white; padding: 2rem; display: flex; flex-direction: column; gap: 3rem; }
+  header strong { font-size: 1.15rem; } nav { display: grid; gap: 1rem; } nav a { width: fit-content; }
+  main { min-width: 0; } .intro { padding: clamp(2rem, 6vw, 6rem); background: #d8e966; }
+  h1 { font-family: Georgia, serif; font-size: clamp(3rem, 6vw, 5.8rem); font-weight: 400; line-height: 1.02; letter-spacing: -.035em; max-width: 13ch; margin: 0 0 2rem; }
+  .intro p { max-width: 55ch; font-size: 1.15rem; }
+  .action { display: inline-block; padding: .85rem 1.15rem; background: #142c52; color: #fff; font-weight: 700; }
+  section:not(.intro) { padding: clamp(2rem, 5vw, 5rem); }
+  h2 { font: 400 clamp(2rem, 4vw, 3.5rem)/1.1 Georgia, serif; margin: 0 0 2rem; }
+  .entry { display: grid; grid-template-columns: minmax(10rem, 1fr) 2fr; gap: 2rem; border-top: 1px solid #8292a1; padding: 1.4rem 0; }
+  h3, p { margin: 0; } h3 { font-size: 1.05rem; } .entry p, .contact p { max-width: 60ch; }
+  .contact { background: #183d76; color: white; } footer { padding: 2rem clamp(2rem, 5vw, 5rem); font-size: .9rem; }
+  @media (max-width: 720px) { .layout { display: block; } header { gap: 1rem; padding: 1.5rem; } nav { display: flex; flex-wrap: wrap; gap: 1rem; } .entry { grid-template-columns: 1fr; gap: .5rem; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<div class="layout">
+<header><strong>Gonzalo<br>Peña Páez</strong><nav aria-label="Navegación principal"><a href="#servicios">Qué hago</a><a href="#experiencia">Experiencia</a><a href="#contacto">Contacto</a></nav></header>
+<main id="contenido">
+  <section class="intro"><h1>Tu negocio, tus sistemas, una conexión mejor.</h1><p>Desarrollo freelance de backend y APIs para empresas y equipos que necesitan integrar o modernizar sus soluciones.</p><a class="action" href="#contacto">Hablar de un proyecto</a></section>
+  <section id="servicios"><h2>En qué puedo ayudarte</h2><div class="entry"><h3>Construir el backend</h3><p>Experiencia en sistemas empresariales con .NET y Oracle.</p></div><div class="entry"><h3>Conectar sistemas</h3><p>Diseño y desarrollo de servicios REST e integraciones.</p></div><div class="entry"><h3>Modernizar con criterio</h3><p>Experiencia en modernización con Azure, respetando el contexto de cada sistema.</p></div></section>
+  <section id="experiencia"><h2>Experiencia que orienta el trabajo</h2><div class="entry"><h3>Fidelización</h3><p>Proyecto real de una plataforma de fidelización. Se omiten el nombre y los detalles del cliente mientras se confirma el permiso para compartirlos.</p></div><div class="entry"><h3>Colaboración técnica</h3><p>Apoyo a empresas y equipos de desarrollo en backend e integraciones.</p></div></section>
+  <section class="contact" id="contacto"><h2>Cuéntame tu necesidad.</h2><p>Correo y LinkedIn están previstos como canales de contacto; sus datos aún requieren confirmación para publicarse. El formulario queda para más adelante.</p></section>
+  <footer>Gonzalo Peña Páez · Desarrollo freelance</footer>
+</main>
+</div>
+</body>
+</html>

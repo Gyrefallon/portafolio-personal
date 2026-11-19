@@ -1,0 +1,22 @@
+---
+import { stack } from '../../content/portfolio';
+---
+
+<div class="border-y border-line bg-white">
+  <div class="container-page">
+    <div class="marquee-mask overflow-hidden py-4">
+      <div class="animate-marquee flex w-max items-center hover:[animation-play-state:paused]">
+        {[0, 1].map((copy) => (
+          <ul class="flex shrink-0 items-center gap-8 pr-8" aria-hidden={copy === 1 ? 'true' : undefined}>
+            {stack.map((item) => (
+              <li class="flex shrink-0 items-center gap-3">
+                <span class="size-1 rounded-full bg-accent/70" aria-hidden="true"></span>
+                <span class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">{item}</span>
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>

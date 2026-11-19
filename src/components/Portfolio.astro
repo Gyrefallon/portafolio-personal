@@ -1,0 +1,70 @@
+---
+import { content, type Language } from '../content/portfolio';
+import { pageUrl } from '../lib/urls';
+import '@fontsource-variable/inter';
+import '../styles/global.css';
+import SiteHeader from './sections/SiteHeader.astro';
+import Hero from './sections/Hero.astro';
+import StackBand from './sections/StackBand.astro';
+import Services from './sections/Services.astro';
+import Experience from './sections/Experience.astro';
+import Project from './sections/Project.astro';
+import Contact from './sections/Contact.astro';
+import Footer from './sections/Footer.astro';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const t = content[language];
+const canonical = new URL(pageUrl(language), Astro.site);
+---
+
+<!doctype html>
+<html lang={language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gonzalo Peña Páez · {t.footer}</title>
+    <meta name="description" content={t.description} />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="es" href={new URL(pageUrl('es'), Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(pageUrl('en'), Astro.site)} />
+  </head>
+  <body class="flex min-h-dvh flex-col bg-white">
+    <a
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
+      href="#main"
+    >{t.skip}</a>
+
+    <SiteHeader t={t} language={language} />
+
+    <main id="main" class="flex-1">
+      <Hero t={t} />
+      <StackBand />
+      <Services t={t} />
+      <Experience t={t} />
+      <Project t={t} />
+      <Contact t={t} language={language} />
+    </main>
+
+    <Footer t={t} />
+
+    <script>
+      import { initContactForm } from '../lib/contact-form';
+
+      const form = document.querySelector('[data-contact-form]');
+      if (form) {
+        let messages = null;
+        try {
+          messages = JSON.parse(form.dataset.messages || '{}');
+        } catch {
+          messages = null;
+        }
+        if (messages) initContactForm(form, messages);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gonzalo Peña Páez · Propuesta abierta</title>
+<style>
+  :root { color-scheme: light; font-family: Georgia, 'Times New Roman', serif; color: #102f2b; background: #d1e8dd; }
+  * { box-sizing: border-box; }
+  body { margin: 0; line-height: 1.5; }
+  a { color: inherit; text-underline-offset: .2em; }
+  a:focus-visible { outline: 3px solid #b93e24; outline-offset: 4px; }
+  .skip { position: absolute; top: -5rem; left: 1rem; padding: .7rem; background: white; z-index: 2; }
+  .skip:focus { top: 1rem; }
+  header, main, footer { width: min(100% - 3rem, 86rem); margin: auto; }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-block: 1.5rem; border-bottom: 1px solid; font: 600 .95rem/1.4 system-ui, sans-serif; }
+  nav { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+  .opening { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(2rem, 7vw, 8rem); padding: clamp(3rem, 7vw, 7rem) 0; }
+  .side { font: 600 .95rem/1.5 system-ui, sans-serif; max-width: 17rem; }
+  h1 { font-size: clamp(2.9rem, 6vw, 5.8rem); line-height: 1.04; letter-spacing: -.035em; margin: 0; max-width: 14ch; font-weight: 400; }
+  .lead { font: 1.2rem/1.55 system-ui, sans-serif; max-width: 40rem; margin: 2rem 0; }
+  .action { display: inline-block; padding: .9rem 1.3rem; background: #102f2b; color: #fff; font: 650 1rem/1.4 system-ui, sans-serif; }
+  .sheet { background: #f8f9ef; padding: clamp(1.5rem, 5vw, 5rem); margin-bottom: 5rem; }
+  .sheet h2, .contact h2 { font-size: clamp(2rem, 4vw, 3.8rem); line-height: 1.1; font-weight: 400; margin: 0 0 2rem; }
+  .row { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; border-top: 1px solid #77968c; padding: 1.5rem 0; }
+  h3, p { margin-top: 0; } h3 { font: 700 1rem/1.4 system-ui, sans-serif; }
+  .row p, .contact p { max-width: 60ch; font: 1rem/1.6 system-ui, sans-serif; }
+  .contact { padding-bottom: 5rem; } footer { border-top: 1px solid; padding-block: 1.5rem; font: .9rem/1.4 system-ui, sans-serif; }
+  @media (max-width: 700px) { header { align-items: flex-start; flex-direction: column; } .opening, .row { grid-template-columns: 1fr; gap: 1rem; } .opening { padding-block: 3rem; } .sheet { margin-bottom: 3rem; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header><span>Gonzalo Peña Páez</span><nav aria-label="Navegación principal"><a href="#servicios">Servicios</a><a href="#experiencia">Experiencia</a><a href="#contacto">Contacto</a></nav></header>
+<main id="contenido">
+  <section class="opening" aria-labelledby="titulo">
+    <p class="side">Desarrollo freelance<br>Para empresas y equipos</p>
+    <div><h1 id="titulo">Software que conecta con tu negocio.</h1><p class="lead">Desarrollo backend e integraciones para transformar necesidades de negocio en soluciones mantenibles.</p><a class="action" href="#contacto">Hablemos de tu proyecto</a></div>
+  </section>
+  <section class="sheet" id="servicios" aria-labelledby="servicios-titulo">
+    <h2 id="servicios-titulo">Del problema a una solución clara.</h2>
+    <div class="row"><h3>Backend empresarial</h3><p>Experiencia con .NET y Oracle para sistemas que sostienen procesos de negocio.</p></div>
+    <div class="row"><h3>APIs e integraciones</h3><p>Servicios REST y conexiones entre sistemas para que la información pueda circular.</p></div>
+    <div class="row"><h3>Modernización</h3><p>Experiencia en modernización con Azure, partiendo del contexto y las necesidades existentes.</p></div>
+  </section>
+  <section class="sheet" id="experiencia" aria-labelledby="experiencia-titulo">
+    <h2 id="experiencia-titulo">Experiencia aplicada</h2>
+    <div class="row"><h3>Plataforma de fidelización</h3><p>Experiencia en un proyecto real de cliente. Los detalles se mantienen anónimos hasta confirmar el permiso de divulgación.</p></div>
+    <div class="row"><h3>Trabajo con equipos</h3><p>Apoyo en backend e integración para empresas y equipos de desarrollo.</p></div>
+  </section>
+  <section class="contact" id="contacto"><h2>Conversemos sobre lo que necesitas.</h2><p>Los canales de correo y LinkedIn se incorporarán cuando se confirme qué datos de contacto pueden publicarse. El formulario se plantea para una etapa posterior.</p></section>
+</main>
+<footer>Gonzalo Peña Páez · Desarrollo freelance</footer>
+</body>
+</html>
