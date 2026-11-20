@@ -92,6 +92,13 @@ test('validation strips line breaks from the name so headers cannot be injected'
   assert.ok(!result.value.name.includes('\r'));
 });
 
+test('validation strips bidi and format controls from the name', () => {
+  const result = validateContact({ name: 'Ana\u202EPérez\u200B', email: 'ana@example.com', message: 'x'.repeat(30) });
+  assert.equal(result.ok, true);
+  assert.ok(!result.value.name.includes('\u202E'));
+  assert.ok(!result.value.name.includes('\u200B'));
+});
+
 test('validation treats non-object input as an empty submission', () => {
   for (const input of [null, undefined, 'text', 42, []]) {
     const result = validateContact(input);
@@ -174,6 +181,7 @@ test('worker sends the message once through Resend when Turnstile passes', async
     assert.equal(resendCalls(calls).length, 1);
     const [mail] = resendCalls(calls);
     assert.equal(mail.init.headers.authorization, 'Bearer re_test_key');
+    assert.match(mail.init.headers['idempotency-key'], /^[a-f0-9]{64}$/);
     const body = JSON.parse(mail.init.body);
     assert.equal(body.to, 'owner@example.com');
     assert.equal(body.from, 'portfolio@resend.dev');
@@ -181,6 +189,17 @@ test('worker sends the message once through Resend when Turnstile passes', async
     assert.match(body.subject, /Ana Pérez/);
     assert.match(body.text, /sistema de facturación/);
     assert.ok(!body.text.includes('turnstile-token'));
+  });
+});
+
+test('worker sends a stable idempotency key for the same submission', async () => {
+  await withFetch({}, async (calls) => {
+    await worker.fetch(jsonRequest(validPayload), makeEnv());
+    await worker.fetch(jsonRequest(validPayload), makeEnv());
+    const keys = resendCalls(calls).map((call) => call.init.headers['idempotency-key']);
+    assert.equal(keys.length, 2);
+    assert.match(keys[0], /^[a-f0-9]{64}$/);
+    assert.equal(keys[0], keys[1]);
   });
 });
 

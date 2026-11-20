@@ -54,6 +54,12 @@ async function readBodyWithin(request: Request, max: number): Promise<string | n
   }
 }
 
+async function submissionId(value: { name: string; email: string; message: string }): Promise<string> {
+  const bytes = new TextEncoder().encode(`${value.email}\n${value.name}\n${value.message}`);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
 async function verifyTurnstile(secret: string, token: string, expectedHostname: string): Promise<{ ok: boolean; codes: string[] }> {
   try {
     const response = await fetch(SITEVERIFY_URL, {
@@ -149,6 +155,7 @@ export default {
     }
 
     const value = result.value;
+    const idempotencyKey = await submissionId(value);
     const text = [`Nombre: ${value.name}`, `Correo: ${value.email}`, '', value.message].join('\n');
     let delivered = false;
     let failure = '';
@@ -157,7 +164,8 @@ export default {
         method: 'POST',
         headers: {
           authorization: `Bearer ${env.RESEND_API_KEY}`,
-          'content-type': 'application/json'
+          'content-type': 'application/json',
+          'idempotency-key': idempotencyKey
         },
         body: JSON.stringify({
           from: env.CONTACT_FROM,

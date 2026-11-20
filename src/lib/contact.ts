@@ -52,7 +52,11 @@ export function validateContact(input: unknown): ContactResult {
   const errors: ContactErrors = {};
 
   // Strip CR/LF before collapsing so a name cannot smuggle mail headers.
-  const name = asText(source.name).replace(/[\r\n]+/g, ' ').trim().replace(/\s+/g, ' ');
+  const name = asText(source.name)
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u2064]/g, '')
+    .trim()
+    .replace(/\s+/g, ' ');
   if (!name) errors.name = 'name_required';
   else if (name.length < CONTACT_LIMITS.name.min) errors.name = 'name_short';
   else if (name.length > CONTACT_LIMITS.name.max) errors.name = 'name_long';

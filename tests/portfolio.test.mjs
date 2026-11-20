@@ -211,3 +211,8 @@ test('the English page carries no Spanish copy from the hero code panel', () => 
   assert.ok(!en.includes('perfil.ts'), 'English page must not show the Spanish panel filename');
   assert.ok(en.includes('3+ years'), 'English panel must keep the English fact');
 });
+
+test('cloudflare headers enforce HSTS for the site and its subdomains', () => {
+  const headers = readFileSync('public/_headers', 'utf8');
+  assert.match(headers, /Strict-Transport-Security: max-age=31536000; includeSubDomains/);
+});

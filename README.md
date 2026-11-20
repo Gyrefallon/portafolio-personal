@@ -32,9 +32,9 @@ Deploy a new build from this machine (the project-local Wrangler keeps its Cloud
 npm run deploy:cloudflare
 ```
 
-That script builds with `SITE_URL=https://gyrefallon-portfolio.gonzalo-2800.workers.dev` and `SITE_BASE=/`, then deploys `dist/` with `wrangler deploy` using `wrangler.jsonc` as an assets-only Worker. The project-local Wrangler lives in `.wrangler-tools/`, which is ignored by Git, so this is a local command. For automatic deploys, connect the repository to the project from the Cloudflare dashboard (Git integration / Workers Builds), use `npm run build` as the build command, `npx wrangler deploy` as the deploy command (the build platform provides Wrangler), and set the same environment variables in the project. The pinned local launcher remains the recommended manual path.
+That script builds with `SITE_URL=https://gyrefallon-portfolio.gonzalo-2800.workers.dev` and `SITE_BASE=/`, then deploys `dist/` with `wrangler deploy` using `wrangler.jsonc` as an assets-only Worker. The project-local Wrangler lives in `.wrangler-tools/` (pinned to 4.160.1) and is ignored by Git, so this is a local command. It isolates the Cloudflare session under `.wrangler-home/` and strips ambient `CLOUDFLARE_*` values before both the build and the deploy. For automatic deploys, connect the repository to the project from the Cloudflare dashboard (Git integration / Workers Builds), use `npm run build` as the build command, `npx wrangler deploy` as the deploy command (the build platform provides Wrangler), and set the same environment variables in the project. The pinned local launcher remains the recommended manual path.
 
-The older `.github/workflows/deploy.yml` still runs the tests and publishes the GitHub Pages fallback at `https://gyrefallon.github.io/portafolio-personal/`. Both builds stay base-aware:
+The older `.github/workflows/deploy.yml` still runs the tests and publishes the GitHub Pages fallback at `https://gyrefallon.github.io/portafolio-personal/`. That fallback cannot apply `public/_headers`; treat it as an unhardened fallback and keep Cloudflare as the production origin. Both builds stay base-aware:
 
 - Origin root (Cloudflare): `SITE_URL=<origin> SITE_BASE=/ npm run build`
 - GitHub Pages project site: `SITE_URL=https://gyrefallon.github.io SITE_BASE=/portafolio-personal/ npm run build`
