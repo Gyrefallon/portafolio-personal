@@ -199,6 +199,7 @@ test('contact form has a safe no-JavaScript fallback and bounded fields', () => 
     assert.ok(markup, `${language}: missing contact form`);
     assert.match(markup, /method="post"/, `${language}: a native submit must never use GET`);
     assert.match(markup, /action="mailto:gonzalopena\.work@protonmail\.com"/, `${language}: native fallback must be mailto`);
+    assert.match(markup, /<noscript>[\s\S]*mailto:gonzalopena\.work@protonmail\.com[\s\S]*<\/noscript>/, `${language}: no-JS users need a direct email path`);
     for (const [field, limit] of [['name', 80], ['email', 254], ['message', 2000]]) {
       assert.match(markup, new RegExp(`id="contact-${field}"[^>]*maxlength="${limit}"`), `${language}: ${field} needs maxlength ${limit}`);
     }

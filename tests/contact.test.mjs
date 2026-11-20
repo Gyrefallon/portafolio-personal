@@ -34,7 +34,7 @@ const validPayload = {
   company: ''
 };
 
-async function withFetch({ turnstile = { success: true }, resend = { id: 'mail_1' }, resendStatus = 200 } = {}, run) {
+async function withFetch({ turnstile = { success: true, hostname: 'example.com', action: 'contact' }, resend = { id: 'mail_1' }, resendStatus = 200 } = {}, run) {
   const original = globalThis.fetch;
   const calls = [];
   globalThis.fetch = async (url, init) => {
@@ -208,6 +208,8 @@ test('worker cancels a streamed body that exceeds the size limit', async () => {
       controller.enqueue(chunk);
       controller.enqueue(chunk);
       controller.enqueue(chunk);
+      controller.enqueue(chunk);
+      controller.enqueue(chunk);
       // Keep the source open briefly so cancellation is observable, then close
       // so an unbounded reader can still finish instead of hanging the test.
       setTimeout(() => {
@@ -230,4 +232,26 @@ test('worker cancels a streamed body that exceeds the size limit', async () => {
   const response = await worker.fetch(request, makeEnv());
   assert.equal(response.status, 413);
   assert.equal(cancelled, true, 'the worker must cancel the stream at the limit');
+});
+
+test('worker rejects a Turnstile token bound to another action or hostname', async () => {
+  for (const turnstile of [
+    { success: true, hostname: 'example.com', action: 'other' },
+    { success: true, hostname: 'evil.example', action: 'contact' }
+  ]) {
+    await withFetch({ turnstile }, async (calls) => {
+      const response = await worker.fetch(jsonRequest(validPayload), makeEnv());
+      assert.equal(response.status, 403, JSON.stringify(turnstile));
+      assert.equal(resendCalls(calls).length, 0, JSON.stringify(turnstile));
+    });
+  }
+});
+
+test('worker accepts a maximum-length multibyte message under the 16 KiB cap', async () => {
+  await withFetch({}, async (calls) => {
+    const message = '漢'.repeat(2000);
+    const response = await worker.fetch(jsonRequest({ ...validPayload, message, token: 't'.repeat(3000) }), makeEnv());
+    assert.equal(response.status, 200);
+    assert.equal(resendCalls(calls).length, 1);
+  });
 });

@@ -93,6 +93,13 @@ const clientMessages = {
     >
       <p class="font-mono text-eyebrow uppercase text-accent">{t.form.title}</p>
 
+      <noscript>
+        <p class="mt-4 rounded-xl border border-line bg-white p-4 text-sm leading-relaxed text-muted">
+          {t.form.noScript}{' '}
+          <a class="font-semibold text-ink underline decoration-ink/20 underline-offset-4" href={`mailto:${t.contactEmail}`}>{t.contactEmail}</a>.
+        </p>
+      </noscript>
+
       <div class="mt-6 grid gap-5">
         <div class="field">
           <label for="contact-name" class="field-label">{t.form.nameLabel}</label>
@@ -151,7 +158,7 @@ const clientMessages = {
 
       {turnstileSiteKey && (
         <div class="mt-5 flex justify-center rounded-xl border border-line bg-white p-4">
-          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-language={language} data-theme="light"></div>
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-action="contact" data-language={language} data-theme="light"></div>
           <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
         </div>
       )}

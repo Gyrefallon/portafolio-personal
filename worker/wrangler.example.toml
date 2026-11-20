@@ -12,9 +12,11 @@ compatibility_date = "2024-09-23"
 CONTACT_EMAIL = "you@example.com"
 # Resend sandbox sender, or a verified domain sender.
 CONTACT_FROM = "onboarding@resend.dev"
-# Exact origin of the published site, with no trailing slash.
-ALLOWED_ORIGIN = "https://OWNER.github.io"
+# Exact origin that serves the form, with no trailing slash. The primary
+# deployment is the project's workers.dev origin, not GitHub Pages.
+ALLOWED_ORIGIN = "https://YOUR-SITE.example"
 
-# Private values — set once with the Wrangler CLI:
-#   RESEND_API_KEY
-#   TURNSTILE_SECRET
+# Private values — set once from the repository root with the isolated
+# launcher (see README.md):
+#   ./.wrangler-tools/wrangler secret put --config worker/wrangler.toml RESEND_API_KEY
+#   ./.wrangler-tools/wrangler secret put --config worker/wrangler.toml TURNSTILE_SECRET

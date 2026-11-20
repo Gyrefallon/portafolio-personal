@@ -6,7 +6,7 @@ import { validateContact } from '../../src/lib/contact.ts';
 
 const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const RESEND_URL = 'https://api.resend.com/emails';
-const MAX_BODY_BYTES = 8 * 1024;
+const MAX_BODY_BYTES = 16 * 1024;
 
 export interface Env {
   CONTACT_EMAIL?: string;
@@ -54,18 +54,22 @@ async function readBodyWithin(request: Request, max: number): Promise<string | n
   }
 }
 
-async function verifyTurnstile(secret: string, token: string): Promise<{ ok: boolean; codes: string[] }> {
+async function verifyTurnstile(secret: string, token: string, expectedHostname: string): Promise<{ ok: boolean; codes: string[] }> {
   try {
     const response = await fetch(SITEVERIFY_URL, {
       method: 'POST',
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ secret, response: token }).toString()
+      body: new URLSearchParams({ secret, response: token }).toString(),
+      signal: AbortSignal.timeout(8000)
     });
     if (!response.ok) return { ok: false, codes: [`siteverify_http_${response.status}`] };
-    const outcome = await response.json() as { success?: boolean; 'error-codes'?: unknown };
+    const outcome = await response.json() as { success?: boolean; hostname?: unknown; action?: unknown; 'error-codes'?: unknown };
     const raw = outcome['error-codes'];
     const codes = Array.isArray(raw) ? raw.filter((code): code is string => typeof code === 'string').slice(0, 6) : [];
-    return { ok: outcome.success === true, codes };
+    if (outcome.success !== true) return { ok: false, codes };
+    if (outcome.action !== 'contact') return { ok: false, codes: [...codes, 'action_mismatch'].slice(0, 6) };
+    if (outcome.hostname !== expectedHostname) return { ok: false, codes: [...codes, 'hostname_mismatch'].slice(0, 6) };
+    return { ok: true, codes };
   } catch {
     return { ok: false, codes: ['verification_unreachable'] };
   }
@@ -103,6 +107,13 @@ export default {
       return json(500, { error: 'not_configured' }, cors);
     }
 
+    let expectedHostname: string;
+    try {
+      expectedHostname = new URL(env.ALLOWED_ORIGIN).hostname;
+    } catch {
+      return json(500, { error: 'not_configured' }, cors);
+    }
+
     const contentType = (request.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
     if (contentType !== 'application/json') {
       return json(415, { error: 'unsupported_media_type' }, cors);
@@ -131,7 +142,7 @@ export default {
     if (!result.ok) return json(422, { error: 'invalid_fields', errors: result.errors }, cors);
 
     const token = typeof payload.token === 'string' ? payload.token : '';
-    const verification = await verifyTurnstile(env.TURNSTILE_SECRET, token);
+    const verification = await verifyTurnstile(env.TURNSTILE_SECRET, token, expectedHostname);
     if (!verification.ok) {
       console.warn('turnstile rejected', verification.codes.join(',') || 'no_codes', 'token_length', token.length);
       return json(403, { error: 'verification_failed', codes: verification.codes }, cors);
@@ -154,16 +165,14 @@ export default {
           reply_to: value.email,
           subject: `Contacto desde el portfolio · ${value.name}`,
           text
-        })
+        }),
+        signal: AbortSignal.timeout(8000)
       });
       delivered = response.ok;
-      if (!delivered) {
-        const detail = await response.text().catch(() => '');
-        failure = `${response.status} ${detail.slice(0, 300)}`;
-      }
+      if (!delivered) failure = `status ${response.status}`;
     } catch (error) {
       delivered = false;
-      failure = `exception ${String(error).slice(0, 200)}`;
+      failure = 'exception';
     }
 
     if (!delivered) {
