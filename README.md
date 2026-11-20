@@ -1,6 +1,6 @@
 # Gonzalo Peña Páez · Portfolio
 
-Bilingual static Astro portfolio. Spanish is at `/` and English at `/en/`. The site includes a contact form (client-side validated, with an honest `mailto:` fallback) plus direct email and LinkedIn links. It is published at `https://gyrefallon.github.io/portafolio-personal/` with GitHub Pages; the published form uses the `mailto:` fallback until a Worker endpoint is configured.
+Bilingual static Astro portfolio. Spanish is at `/` and English at `/en/`. The site includes a contact form (client-side validated, with an honest `mailto:` fallback) plus direct email and LinkedIn links. It is published at `https://gyrefallon-portfolio.pages.dev/` with Cloudflare Pages; the original GitHub Pages deployment remains available as a legacy fallback. The published form uses the `mailto:` fallback until a Worker endpoint is configured.
 
 Styling uses Tailwind CSS v4 compiled through `@tailwindcss/vite`. Design tokens live in `src/styles/global.css`, the section components under `src/components/sections/`, and the visual rules are described in `DESIGN.md`.
 
@@ -22,16 +22,24 @@ npm run build
 
 The test builds with a sample project-site base and checks both rendered language pages. Generated files, dependencies and the local npm cache are ignored by Git. Astro telemetry is disabled in the project scripts.
 
-## GitHub Pages deployment
+## Deployment
 
-The site is published at `https://gyrefallon.github.io/portafolio-personal/` by `.github/workflows/deploy.yml`. Every push to `main` runs the test suite, builds with `SITE_URL=https://gyrefallon.github.io` and `SITE_BASE=/portafolio-personal/`, and deploys `dist/` through GitHub Pages.
+The primary site is `https://gyrefallon-portfolio.pages.dev/`, served by Cloudflare Pages. `public/_headers` adds CSP, HSTS and the other security headers that GitHub Pages cannot set.
 
-The build stays configurable for other destinations:
+Deploy a new build from this machine (the project-local Wrangler keeps its Cloudflare session isolated):
 
-- User site at `https://gyrefallon.github.io/`: `SITE_URL=https://gyrefallon.github.io SITE_BASE=/ npm run build`
-- Project site at `https://gyrefallon.github.io/REPOSITORY/`: `SITE_URL=https://gyrefallon.github.io SITE_BASE=/REPOSITORY/ npm run build`
+```sh
+npm run deploy:cloudflare
+```
 
-`SITE_URL` is the origin and `SITE_BASE` the path prefix; together they determine canonical and alternate-language URLs. The optional repository variables `PUBLIC_CONTACT_ENDPOINT` and `PUBLIC_TURNSTILE_SITE_KEY` are read at build time: when unset, the published form uses the `mailto:` fallback and renders no Turnstile widget.
+That script builds with `SITE_URL=https://gyrefallon-portfolio.pages.dev` and `SITE_BASE=/`, then uploads `dist/` to the `gyrefallon-portfolio` Pages project. For automatic deploys, connect the repository to the project from the Cloudflare dashboard (Git integration), use `npm run build` as the build command, `dist` as the output directory, and set the same environment variables in the project.
+
+The older `.github/workflows/deploy.yml` still runs the tests and publishes the GitHub Pages fallback at `https://gyrefallon.github.io/portafolio-personal/`. Both builds stay base-aware:
+
+- Origin root (Cloudflare Pages): `SITE_URL=<origin> SITE_BASE=/ npm run build`
+- GitHub Pages project site: `SITE_URL=https://gyrefallon.github.io SITE_BASE=/portafolio-personal/ npm run build`
+
+`SITE_URL` is the origin and `SITE_BASE` the path prefix; together they determine canonical and alternate-language URLs. The optional build variables `PUBLIC_CONTACT_ENDPOINT` and `PUBLIC_TURNSTILE_SITE_KEY` are read at build time (GitHub Actions repository variables for the fallback, Cloudflare Pages environment variables for the primary site): when unset, the published form uses the `mailto:` fallback and renders no Turnstile widget.
 
 ## Contact architecture
 
