@@ -17,6 +17,7 @@ export interface ContactFormMessages {
   failure: string;
   mailtoLabel: string;
   mailtoHelper: string;
+  verificationRequired: string;
   errors: Record<ContactErrorCode, string>;
 }
 
@@ -120,6 +121,10 @@ export function initContactForm(form: HTMLFormElement, messages: ContactFormMess
 
       if (response.ok) {
         form.reset();
+        // Turnstile tokens are single-use: clear the solved widget so the next
+        // submission can obtain a fresh one.
+        const turnstile = (window as unknown as { turnstile?: { reset: () => void } }).turnstile;
+        turnstile?.reset();
         announce(messages.success);
         return;
       }

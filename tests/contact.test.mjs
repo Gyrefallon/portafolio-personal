@@ -198,3 +198,36 @@ test('worker refuses to run without the required configuration', async () => {
     assert.equal(response.status, 500, missing);
   }
 });
+
+test('worker cancels a streamed body that exceeds the size limit', async () => {
+  let cancelled = false;
+  let closed = false;
+  const chunk = new TextEncoder().encode('x'.repeat(4096));
+  const body = new ReadableStream({
+    start(controller) {
+      controller.enqueue(chunk);
+      controller.enqueue(chunk);
+      controller.enqueue(chunk);
+      // Keep the source open briefly so cancellation is observable, then close
+      // so an unbounded reader can still finish instead of hanging the test.
+      setTimeout(() => {
+        if (closed) return;
+        closed = true;
+        controller.close();
+      }, 50);
+    },
+    cancel() {
+      cancelled = true;
+      closed = true;
+    }
+  });
+  const request = new Request(`${ORIGIN}/`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: ORIGIN },
+    body,
+    duplex: 'half'
+  });
+  const response = await worker.fetch(request, makeEnv());
+  assert.equal(response.status, 413);
+  assert.equal(cancelled, true, 'the worker must cancel the stream at the limit');
+});

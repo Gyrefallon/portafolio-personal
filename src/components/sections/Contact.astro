@@ -87,6 +87,8 @@ const clientMessages = {
       data-endpoint={endpoint}
       data-messages={JSON.stringify(clientMessages)}
       novalidate
+      method="post"
+      action={`mailto:${t.contactEmail}`}
       aria-label={t.form.title}
     >
       <p class="font-mono text-eyebrow uppercase text-accent">{t.form.title}</p>
@@ -100,6 +102,7 @@ const clientMessages = {
             type="text"
             autocomplete="name"
             required
+            maxlength="80"
             class="field-control"
             aria-describedby="contact-name-hint contact-name-error"
           />
@@ -117,6 +120,7 @@ const clientMessages = {
             autocomplete="email"
             spellcheck="false"
             required
+            maxlength="254"
             class="field-control"
             aria-describedby="contact-email-hint contact-email-error"
           />
@@ -131,6 +135,7 @@ const clientMessages = {
             name="message"
             rows="5"
             required
+            maxlength="2000"
             class="field-control min-h-36 resize-y"
             aria-describedby="contact-message-hint contact-message-error"
           ></textarea>

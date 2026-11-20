@@ -45,7 +45,7 @@ The form never delivers mail by itself and the static site holds no secrets.
 ### Build-time variables (public, safe to expose)
 
 - `PUBLIC_CONTACT_ENDPOINT` — full URL of the deployed Worker (for example `https://portfolio-contact.<account>.workers.dev/`). When unset, submitting the form opens the visitor's mail app via `buildMailto` and the helper text says so; success is never faked.
-- `PUBLIC_TURNSTILE_SITE_KEY` — Turnstile site key. When unset the widget and its script are not rendered.
+- `PUBLIC_TURNSTILE_SITE_KEY` — Turnstile site key. Direct delivery requires it: the widget renders only with this key and the Worker verifies a token on every submission. Without it the form cannot deliver directly and stays on the `mailto:` fallback.
 
 ### Worker variables (runtime, non-secret)
 
@@ -57,7 +57,7 @@ The form never delivers mail by itself and the static site holds no secrets.
 
 ### Prerequisites to enable direct delivery
 
-- A Turnstile widget (site key + secret) if the form is to be protected in production; without the site key the form still works with validation and the honeypot.
+- A Turnstile widget (site key + secret) is required for direct delivery: the Worker always verifies a token, so a configured endpoint without a site key will reject every submission. Without an endpoint the form stays on the `mailto:` fallback.
 - A Resend account with the API key as a Worker secret; `CONTACT_FROM` must be the Resend sandbox sender or a verified domain sender.
 - The Worker's `ALLOWED_ORIGIN` must exactly match the origin published on GitHub Pages.
 

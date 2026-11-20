@@ -9,12 +9,12 @@ interface Props {
 const { t } = Astro.props;
 
 const profileCode = [
-  '<span class="text-white/35">// perfil.ts</span>',
-  '<span class="text-mint">const</span> perfil = {',
-  '  rol: <span class="text-accent-soft">\'Backend developer\'</span>,',
+  '<span class="text-white/35">// profile.ts</span>',
+  '<span class="text-mint">const</span> profile = {',
+  '  role: <span class="text-accent-soft">\'Backend developer\'</span>,',
   '  stack: [<span class="text-accent-soft">\'.NET\'</span>, <span class="text-accent-soft">\'Oracle\'</span>, <span class="text-accent-soft">\'Azure\'</span>],',
-  '  foco: <span class="text-accent-soft">\'APIs + integraciones\'</span>,',
-  '  exp: <span class="text-accent-soft">\'3+ años\'</span>,',
+  '  focus: <span class="text-accent-soft">\'APIs + integrations\'</span>,',
+  '  exp: <span class="text-accent-soft">\'3+ years\'</span>,',
   '};'
 ].join('\n');
 ---
@@ -68,7 +68,7 @@ const profileCode = [
           <span class="size-2.5 rounded-full bg-white/15" aria-hidden="true"></span>
           <span class="size-2.5 rounded-full bg-white/15" aria-hidden="true"></span>
           <span class="size-2.5 rounded-full bg-white/15" aria-hidden="true"></span>
-          <span class="ml-2 font-mono text-[11px] text-white/45">perfil.ts</span>
+          <span class="ml-2 font-mono text-[11px] text-white/45">profile.ts</span>
           <span class="ml-auto font-mono text-[10px] uppercase tracking-[0.18em] text-white/30">backend</span>
         </div>
 

@@ -25,6 +25,35 @@ function json(status: number, body: unknown, headers: Record<string, string> = {
   });
 }
 
+
+// Read at most `max` bytes and cancel the stream as soon as the limit is
+// crossed, so an oversized body can never be fully buffered in memory.
+async function readBodyWithin(request: Request, max: number): Promise<string | null> {
+  const declared = request.headers.get('content-length');
+  if (declared !== null && Number(declared) > max) return null;
+  if (!request.body) return '';
+
+  const reader = request.body.getReader();
+  const decoder = new TextDecoder();
+  let bytes = 0;
+  let text = '';
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      bytes += value.byteLength;
+      if (bytes > max) {
+        await reader.cancel();
+        return null;
+      }
+      text += decoder.decode(value, { stream: true });
+    }
+    return text + decoder.decode();
+  } finally {
+    try { reader.releaseLock(); } catch { /* already released */ }
+  }
+}
+
 async function verifyTurnstile(secret: string, token: string): Promise<{ ok: boolean; codes: string[] }> {
   try {
     const response = await fetch(SITEVERIFY_URL, {
@@ -79,10 +108,8 @@ export default {
       return json(415, { error: 'unsupported_media_type' }, cors);
     }
 
-    const raw = await request.text();
-    if (new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) {
-      return json(413, { error: 'payload_too_large' }, cors);
-    }
+    const raw = await readBodyWithin(request, MAX_BODY_BYTES);
+    if (raw === null) return json(413, { error: 'payload_too_large' }, cors);
 
     let parsed: unknown;
     try {

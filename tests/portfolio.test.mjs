@@ -192,3 +192,21 @@ test('S12: focus-visible outline and skip link are preserved', () => {
     assert.match(body, /^<body[^>]*>\s*<a[^>]*href="#main"/, `${language}: skip link must be the first focusable element`);
   }
 });
+
+test('contact form has a safe no-JavaScript fallback and bounded fields', () => {
+  for (const [language, page] of [['es', () => es], ['en', () => en]]) {
+    const markup = page().match(/<form[^>]*>[\s\S]*?<\/form>/)?.[0];
+    assert.ok(markup, `${language}: missing contact form`);
+    assert.match(markup, /method="post"/, `${language}: a native submit must never use GET`);
+    assert.match(markup, /action="mailto:gonzalopena\.work@protonmail\.com"/, `${language}: native fallback must be mailto`);
+    for (const [field, limit] of [['name', 80], ['email', 254], ['message', 2000]]) {
+      assert.match(markup, new RegExp(`id="contact-${field}"[^>]*maxlength="${limit}"`), `${language}: ${field} needs maxlength ${limit}`);
+    }
+  }
+});
+
+test('the English page carries no Spanish copy from the hero code panel', () => {
+  assert.ok(!en.includes('3+ años'), 'English page must not show the Spanish panel copy');
+  assert.ok(!en.includes('perfil.ts'), 'English page must not show the Spanish panel filename');
+  assert.ok(en.includes('3+ years'), 'English panel must keep the English fact');
+});

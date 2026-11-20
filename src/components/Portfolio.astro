@@ -29,6 +29,7 @@ const canonical = new URL(pageUrl(language), Astro.site);
     <title>Gonzalo Peña Páez · {t.footer}</title>
     <meta name="description" content={t.description} />
     <meta name="theme-color" content="#ffffff" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="es" href={new URL(pageUrl('es'), Astro.site)} />
     <link rel="alternate" hreflang="en" href={new URL(pageUrl('en'), Astro.site)} />
