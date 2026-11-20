@@ -9,6 +9,7 @@ export default defineConfig({
   site: process.env.SITE_URL || 'https://gyrefallon-portfolio.gonzalo-2800.workers.dev',
   base,
   trailingSlash: 'always',
+  compressHTML: true,
   vite: {
     plugins: [tailwindcss()]
   }

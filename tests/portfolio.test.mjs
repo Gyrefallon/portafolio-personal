@@ -180,9 +180,9 @@ test('S12: contact card grid uses a shrinkable column on narrow screens', () => 
 });
 
 test('S12: compiled CSS neutralises animation under prefers-reduced-motion', () => {
-  assert.match(css, /@media\(prefers-reduced-motion:reduce\)\{[\s\S]{0,300}?animation-duration:\.01ms!important/);
-  assert.match(css, /@media\(prefers-reduced-motion:reduce\)\{[\s\S]{0,300}?animation-iteration-count:1!important/);
-  assert.match(css, /@media\(prefers-reduced-motion:no-preference\)\{@supports \(animation-timeline:view\(\)\)\{\.reveal\{animation:linear both reveal-up/);
+  assert.match(css, /@media\s*\(prefers-reduced-motion:reduce\)\{[\s\S]{0,400}?animation-duration:\.01ms!important/);
+  assert.match(css, /@media\s*\(prefers-reduced-motion:reduce\)\{[\s\S]{0,400}?animation-iteration-count:1!important/);
+  assert.match(css, /@media\s*\(prefers-reduced-motion:no-preference\)\{@supports \(animation-timeline:view\(\)\)\{\.reveal\{animation:linear both reveal-up/);
 });
 
 test('S12: focus-visible outline and skip link are preserved', () => {

@@ -6,7 +6,7 @@ Styling uses Tailwind CSS v4 compiled through `@tailwindcss/vite`. Design tokens
 
 ## Local setup
 
-Use a Node.js version supported by Astro 5 and npm. Install locally and run:
+Use Node.js 22.23.4 or newer (required by Astro 7) and npm. Install locally and run:
 
 ```sh
 npm install --cache .npm-cache --no-audit --no-fund
