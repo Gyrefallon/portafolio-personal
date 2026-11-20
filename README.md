@@ -1,6 +1,6 @@
 # Gonzalo Peña Páez · Portfolio
 
-Bilingual static Astro portfolio. Spanish is at `/` and English at `/en/`. The site includes a contact form (client-side validated, with an honest `mailto:` fallback) plus direct email and LinkedIn links. It is published at `https://gyrefallon-portfolio.pages.dev/` with Cloudflare Pages; the original GitHub Pages deployment remains available as a legacy fallback. The published form uses the `mailto:` fallback until a Worker endpoint is configured.
+Bilingual static Astro portfolio. Spanish is at `/` and English at `/en/`. The site includes a contact form (client-side validated, with an honest `mailto:` fallback) plus direct email and LinkedIn links. It is published at `https://gyrefallon-portfolio.gonzalo-2800.workers.dev/` with Cloudflare Pages; the original GitHub Pages deployment remains available as a legacy fallback. The published form uses the `mailto:` fallback until a Worker endpoint is configured.
 
 Styling uses Tailwind CSS v4 compiled through `@tailwindcss/vite`. Design tokens live in `src/styles/global.css`, the section components under `src/components/sections/`, and the visual rules are described in `DESIGN.md`.
 
@@ -24,7 +24,7 @@ The test builds with a sample project-site base and checks both rendered languag
 
 ## Deployment
 
-The primary site is `https://gyrefallon-portfolio.pages.dev/`, served by Cloudflare Pages. `public/_headers` adds CSP, HSTS and the other security headers that GitHub Pages cannot set.
+The primary site is `https://gyrefallon-portfolio.gonzalo-2800.workers.dev/`, served by Cloudflare as static assets (the current Pages platform, now part of Workers). `public/_headers` adds CSP, HSTS and the other security headers that GitHub Pages cannot set.
 
 Deploy a new build from this machine (the project-local Wrangler keeps its Cloudflare session isolated):
 
@@ -32,11 +32,11 @@ Deploy a new build from this machine (the project-local Wrangler keeps its Cloud
 npm run deploy:cloudflare
 ```
 
-That script builds with `SITE_URL=https://gyrefallon-portfolio.pages.dev` and `SITE_BASE=/`, then uploads `dist/` to the `gyrefallon-portfolio` Pages project. For automatic deploys, connect the repository to the project from the Cloudflare dashboard (Git integration), use `npm run build` as the build command, `dist` as the output directory, and set the same environment variables in the project.
+That script builds with `SITE_URL=https://gyrefallon-portfolio.gonzalo-2800.workers.dev` and `SITE_BASE=/`, then deploys `dist/` with `wrangler deploy` using `wrangler.jsonc` as an assets-only Worker. The project-local Wrangler lives in `.wrangler-tools/`, which is ignored by Git, so this is a local command. For automatic deploys, connect the repository to the project from the Cloudflare dashboard (Git integration / Workers Builds), use `npm run build` as the build command, `dist` as the output directory, and set the same environment variables in the project.
 
 The older `.github/workflows/deploy.yml` still runs the tests and publishes the GitHub Pages fallback at `https://gyrefallon.github.io/portafolio-personal/`. Both builds stay base-aware:
 
-- Origin root (Cloudflare Pages): `SITE_URL=<origin> SITE_BASE=/ npm run build`
+- Origin root (Cloudflare): `SITE_URL=<origin> SITE_BASE=/ npm run build`
 - GitHub Pages project site: `SITE_URL=https://gyrefallon.github.io SITE_BASE=/portafolio-personal/ npm run build`
 
 `SITE_URL` is the origin and `SITE_BASE` the path prefix; together they determine canonical and alternate-language URLs. The optional build variables `PUBLIC_CONTACT_ENDPOINT` and `PUBLIC_TURNSTILE_SITE_KEY` are read at build time (GitHub Actions repository variables for the fallback, Cloudflare Pages environment variables for the primary site): when unset, the published form uses the `mailto:` fallback and renders no Turnstile widget.

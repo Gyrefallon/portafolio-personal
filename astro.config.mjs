@@ -6,7 +6,7 @@ const base = `/${(process.env.SITE_BASE || '').replace(/^\/+|\/+$/g, '')}/`.repl
 
 export default defineConfig({
   output: 'static',
-  site: process.env.SITE_URL || 'https://gyrefallon-portfolio.pages.dev',
+  site: process.env.SITE_URL || 'https://gyrefallon-portfolio.gonzalo-2800.workers.dev',
   base,
   trailingSlash: 'always',
   vite: {

@@ -6,7 +6,7 @@
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "test": "node --test tests/*.test.mjs",
-    "deploy:cloudflare": "SITE_URL=https://gyrefallon-portfolio.pages.dev SITE_BASE=/ npm run build && ./.wrangler-tools/wrangler pages deploy dist --project-name gyrefallon-portfolio --branch main"
+    "deploy:cloudflare": "SITE_URL=https://gyrefallon-portfolio.gonzalo-2800.workers.dev SITE_BASE=/ npm run build && ./.wrangler-tools/wrangler deploy"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
